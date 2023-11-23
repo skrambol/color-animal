@@ -88,7 +88,19 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
       .send({ tuple: payload });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(payload);
+    expect(response.body).toHaveLength(1);
+    expect(response.body).toEqual([payload]);
+  });
+
+  test("update an existing multiple tuples", async () => {
+    const payload = { color: "Gray", animal: "Owl" };
+    const response = await api
+      .put(`${baseUrl}/Brown/Owl`)
+      .send({ tuple: payload });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(3); // from previous POST calls
+    expect(response.body).toEqual([payload, payload, payload]);
   });
 
   test("update an existing tuple's color if animal is missing", async () => {
@@ -98,7 +110,8 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
       .send({ tuple: payload });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ color: "White", animal: "Bird" });
+    expect(response.body).toHaveLength(1);
+    expect(response.body).toEqual([{ color: "White", animal: "Bird" }]);
   });
 
   test("update an existing tuple's animal if color is missing", async () => {
@@ -108,6 +121,7 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
       .send({ tuple: payload });
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ color: "Blue", animal: "Bird" });
+    expect(response.body).toHaveLength(1);
+    expect(response.body).toEqual([{ color: "Blue", animal: "Bird" }]);
   });
 });

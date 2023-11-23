@@ -40,18 +40,27 @@ router.post("/", (request: Request, response: Response) => {
 router.put("/:color/:animal", (request: Request, response: Response) => {
   const { color, animal } = request.params;
   const { color: newColor, animal: newAnimal } = request.body.tuple;
+  let updatedTuples: ColorAnimal[] = [];
 
-  const tuple = data.find((t) => t.color === color && t.animal === animal);
-  if (!tuple) {
+  data = data.map((tuple) => {
+    if (tuple.color === color && tuple.animal === animal) {
+      // update accordingly if (color, animal) exists
+      tuple.color = newColor || tuple.color;
+      tuple.animal = newAnimal || tuple.animal;
+
+      updatedTuples = updatedTuples.concat(tuple);
+    }
+
+    return tuple;
+  });
+
+  if (updatedTuples.length === 0) {
     return response
       .status(404)
       .json({ error: `(${color}, ${animal}) not found.` });
   }
 
-  tuple.color = newColor || tuple.color;
-  tuple.animal = newAnimal || tuple.animal;
-
-  response.json(tuple);
+  response.json(updatedTuples);
 });
 
 export default router;
