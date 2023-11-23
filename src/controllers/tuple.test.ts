@@ -151,3 +151,50 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
     expect(response.body).toEqual([{ color: "Blue", animal: "Whale" }]);
   });
 });
+
+describe(`DELETE ${baseUrl}/:color/:animal`, () => {
+  beforeEach(() => {
+    data.tuples = [
+      {
+        color: "Red",
+        animal: "Fox",
+      },
+      {
+        color: "Brown",
+        animal: "Owl",
+      },
+      {
+        color: "Blue",
+        animal: "Bird",
+      },
+      {
+        color: "Brown",
+        animal: "Owl",
+      },
+    ];
+  });
+
+  test("return 204 even if tuple does not exist", async () => {
+    const oldLength = data.tuples.length;
+    const response = await api.delete(`${baseUrl}/no-color/no-animal`);
+
+    expect(response.status).toBe(204);
+    expect(data.tuples).toHaveLength(oldLength);
+  });
+
+  test("delete one tuple", async () => {
+    const oldLength = data.tuples.length;
+    const response = await api.delete(`${baseUrl}/Blue/Bird`);
+
+    expect(response.status).toBe(204);
+    expect(data.tuples).toHaveLength(oldLength - 1);
+  });
+
+  test("delete multiple tuples if duplicate", async () => {
+    const oldLength = data.tuples.length;
+    const response = await api.delete(`${baseUrl}/Brown/Owl`);
+
+    expect(response.status).toBe(204);
+    expect(data.tuples).toHaveLength(oldLength - 2);
+  });
+});

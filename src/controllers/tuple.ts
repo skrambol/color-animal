@@ -67,4 +67,13 @@ router.put("/:color/:animal", (request: Request, response: Response) => {
   response.json(updatedTuples);
 });
 
+router.delete("/:color/:animal", (request: Request, response: Response) => {
+  const { color, animal } = request.params;
+  data.tuples = data.tuples.filter(
+    (tuple) => JSON.stringify(tuple) !== JSON.stringify({ color, animal }),
+  );
+
+  response.status(204).send();
+});
+
 export default router;
