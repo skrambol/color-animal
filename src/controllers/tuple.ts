@@ -5,34 +5,38 @@ export interface ColorAnimal {
   animal: string;
 }
 
+export const data: Record<"tuples", ColorAnimal[]> = {
+  tuples: [
+    {
+      color: "Red",
+      animal: "Fox",
+    },
+    {
+      color: "Blue",
+      animal: "Bird",
+    },
+  ],
+};
 const router: Router = express.Router();
-let data: ColorAnimal[] = [
-  {
-    color: "Red",
-    animal: "Fox",
-  },
-  {
-    color: "Blue",
-    animal: "Bird",
-  },
-];
 
 router.get("/", (request: Request, response: Response) => {
   const isRandom: boolean = request.query.random === "true";
 
   if (isRandom) {
-    const rand: number = Math.floor(Math.random() * data.length);
-    return response.json(data[rand]);
+    const rand: number = Math.floor(Math.random() * data.tuples.length);
+    return response.json(data.tuples[rand]);
   }
 
-  response.json(data);
+  response.json(data.tuples);
 });
 
 router.post("/", (request: Request, response: Response) => {
-  const tuples: ColorAnimal[] = request.body.tuples;
+  const newTuples: ColorAnimal[] = request.body.tuples;
 
-  const cleanedTuples = tuples.filter((tuple) => tuple.color && tuple.animal);
-  data = data.concat(cleanedTuples);
+  const cleanedTuples = newTuples.filter(
+    (tuple) => tuple.color && tuple.animal,
+  );
+  data.tuples = data.tuples.concat(cleanedTuples);
 
   response.status(201).json(cleanedTuples);
 });
@@ -42,7 +46,7 @@ router.put("/:color/:animal", (request: Request, response: Response) => {
   const { color: newColor, animal: newAnimal } = request.body.tuple;
   let updatedTuples: ColorAnimal[] = [];
 
-  data = data.map((tuple) => {
+  data.tuples = data.tuples.map((tuple) => {
     if (tuple.color === color && tuple.animal === animal) {
       // update accordingly if (color, animal) exists
       tuple.color = newColor || tuple.color;
