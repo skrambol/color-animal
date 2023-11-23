@@ -1,12 +1,12 @@
 import express, { Router, Request, Response } from "express";
 
-interface ColorAnimal {
+export interface ColorAnimal {
   color: string;
   animal: string;
 }
 
 const router: Router = express.Router();
-const data: ColorAnimal[] = [
+let data: ColorAnimal[] = [
   {
     color: "Red",
     animal: "Fox",
@@ -26,6 +26,15 @@ router.get("/", (request: Request, response: Response) => {
   }
 
   response.json(data);
+});
+
+router.post("/", (request: Request, response: Response) => {
+  const tuples: ColorAnimal[] = request.body.tuples;
+
+  const cleanedTuples = tuples.filter((tuple) => tuple.color && tuple.animal);
+  data = data.concat(cleanedTuples);
+
+  response.status(201).json(cleanedTuples);
 });
 
 export default router;
