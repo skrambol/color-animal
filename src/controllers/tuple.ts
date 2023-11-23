@@ -37,4 +37,21 @@ router.post("/", (request: Request, response: Response) => {
   response.status(201).json(cleanedTuples);
 });
 
+router.put("/:color/:animal", (request: Request, response: Response) => {
+  const { color, animal } = request.params;
+  const { color: newColor, animal: newAnimal } = request.body.tuple;
+
+  const tuple = data.find((t) => t.color === color && t.animal === animal);
+  if (!tuple) {
+    return response
+      .status(404)
+      .json({ error: `(${color}, ${animal}) not found.` });
+  }
+
+  tuple.color = newColor || tuple.color;
+  tuple.animal = newAnimal || tuple.animal;
+
+  response.json(tuple);
+});
+
 export default router;
