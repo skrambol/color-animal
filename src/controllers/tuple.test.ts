@@ -101,7 +101,7 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
     const payload = { color: "Red", animal: "Eagle" };
     const response = await api
       .put(`${baseUrl}/White/Eagle`)
-      .send({ tuple: payload });
+      .send(payload);
 
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("error");
@@ -111,7 +111,7 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
     const payload = { color: "White", animal: "Fox" };
     const response = await api
       .put(`${baseUrl}/Red/Fox`)
-      .send({ tuple: payload });
+      .send(payload);
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
@@ -122,7 +122,7 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
     const payload = { color: "Gray", animal: "Owl" };
     const response = await api
       .put(`${baseUrl}/Brown/Owl`)
-      .send({ tuple: payload });
+      .send(payload);
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);
@@ -133,7 +133,7 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
     const payload = { color: "White" };
     const response = await api
       .put(`${baseUrl}/Blue/Bird`)
-      .send({ tuple: payload });
+      .send(payload);
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
@@ -144,7 +144,7 @@ describe(`PUT ${baseUrl}/:color/:animal`, () => {
     const payload = { animal: "Whale" };
     const response = await api
       .put(`${baseUrl}/Blue/Bird`)
-      .send({ tuple: payload });
+      .send(payload);
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);

@@ -43,12 +43,13 @@ router.post("/", (request: Request, response: Response) => {
 
 router.put("/:color/:animal", (request: Request, response: Response) => {
   const { color, animal } = request.params;
-  const { color: newColor, animal: newAnimal } = request.body.tuple;
+  const { color: newColor, animal: newAnimal } = request.body;
   let updatedTuples: ColorAnimal[] = [];
 
   data.tuples = data.tuples.map((tuple) => {
     if (tuple.color === color && tuple.animal === animal) {
       // update accordingly if (color, animal) exists
+      // keep previous animal/color if it is missing from payload
       tuple.color = newColor || tuple.color;
       tuple.animal = newAnimal || tuple.animal;
 
